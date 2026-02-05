@@ -9,9 +9,11 @@
 int main()
 {
 	int dayCounter = 0;
-	Settlement* bigSettlement = new MajorSettlement();
-	Settlement* smallSettlement = new MinorSettlement();
-    
+    GlobalResources globalResources;
+	globalResources.resources = { { ResourceType::Wood,  10 }, { ResourceType::Stone, 10 }, { ResourceType::Brick, 10 }, { ResourceType::Food, 10 } };
+
+    MajorSettlement major(globalResources);
+    MinorSettlement minor(globalResources);
 
     while (true)
     {
@@ -22,8 +24,8 @@ int main()
         if (input == "Q")
             break;
 
-        bigSettlement->advanceByADay(dayCounter);
-        smallSettlement->advanceByADay(dayCounter);
+        major.advanceByADay(dayCounter);
+        minor.advanceByADay(dayCounter);
         dayCounter++;
 
         std::cout << "-------------------------------------------------------------------------------\n";

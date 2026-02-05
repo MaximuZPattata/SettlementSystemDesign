@@ -32,4 +32,10 @@ struct BuildingDefinition
     ResourceMap buildCost;
 };
 
+class GlobalResources
+{
+public:
+    ResourceMap resources = {};
+};
+
 extern const std::unordered_map<BuildingType, BuildingDefinition> BuildingDefs;

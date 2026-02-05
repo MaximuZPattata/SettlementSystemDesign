@@ -51,7 +51,7 @@ public:
 class Brickworks : public Building
 {
 public:
-    Brickworks() : Building(1, 4, 1, 3, ResourceType::Brick, BuildingType::Brickworks) {}
+    Brickworks() : Building(1, 4, 2, 3, ResourceType::Brick, BuildingType::Brickworks) {}
 };
 
 class LumberCamp : public Building
@@ -63,6 +63,6 @@ public:
 class Quarry : public Building
 {
 public:
-    Quarry() : Building(1, 3, 1, 2, ResourceType::Stone, BuildingType::Quarry) {}
+    Quarry() : Building(1, 3, 3, 2, ResourceType::Stone, BuildingType::Quarry) {}
 };
 

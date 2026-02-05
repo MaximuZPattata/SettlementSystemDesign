@@ -10,14 +10,14 @@ void Settlement::advanceByADay(int dayCounter)
 	std::cout << "Settlement advanced by a day. Current day: " << dayCounter << std::endl;
 	std::cout << "Current resources: \n";
 
-	for (const auto& [resource, amount] : m_globalResourceCount)
+	for (const auto& [resource, amount] : m_resources.resources)
 		std::cout << resourceTypeToString(resource) << ": " << amount << std::endl;
 }
 
 void MajorSettlement::consumeResources(const ResourceMap& cost)
 {
 	for (const auto& [resource, amount] : cost)
-		m_globalResourceCount[resource] -= amount;
+		m_resources.resources[resource] -= amount;
 }
 
 void MajorSettlement::updateResourceProduction(int currentDayCounter)
@@ -27,7 +27,7 @@ void MajorSettlement::updateResourceProduction(int currentDayCounter)
 		ResourceType resourceType = building->getResourceProductionType();
 		int producedAmount = building->getResourceForTheDay(currentDayCounter);
 
-		m_globalResourceCount[resourceType] += producedAmount;
+		m_resources.resources[resourceType] += producedAmount;
 	}
 }
 
@@ -56,8 +56,8 @@ void MajorSettlement::upgradeExistingBuildings()
 		{
 			int requiredAmount = baseAmount * building->getCurrentBuildingLevel();
 
-			auto it = m_globalResourceCount.find(resource);
-			if (it == m_globalResourceCount.end() || it->second < requiredAmount)
+			auto it = m_resources.resources.find(resource);
+			if (it == m_resources.resources.end() || it->second < requiredAmount)
 			{
 				canUpgrade = false;
 				break;
@@ -85,9 +85,12 @@ void MajorSettlement::constructNewBuildings()
 
 		for (const auto& [resource, requiredAmount] : costToBuild)
 		{
-			auto it = m_globalResourceCount.find(resource);
-			if (it == m_globalResourceCount.end() || it->second < requiredAmount)
+			auto it = Settlement::m_resources.resources.find(resource);
+			if (it == Settlement::m_resources.resources.end() || it->second < requiredAmount)
+			{
 				canBuild = false;
+				break;
+			}
 		}
 
 		if (!canBuild)
@@ -98,7 +101,9 @@ void MajorSettlement::constructNewBuildings()
 		auto building = createBuilding(buildingType);
 		m_buildingsList.push_back(std::move(building));
 
-		std::cout << "Constructed new " << buildingTypeToString(buildingType) << "!" << std::endl;
+		notifyBuildingConstructed(buildingType);
+		notifyResourcesChanged();
+		//std::cout << "Constructed new " << buildingTypeToString(buildingType) << "!" << std::endl;
 	}
 }
 
@@ -129,7 +134,7 @@ void MajorSettlement::advanceByADay(int dayCounter)
 	upgradeExistingBuildings();
 	constructNewBuildings();
 
-	Settlement::advanceByADay(dayCounter);
+	//Settlement::advanceByADay(dayCounter);
 }
 
 void MinorSettlement::advanceByADay(int dayCounter)
@@ -137,8 +142,8 @@ void MinorSettlement::advanceByADay(int dayCounter)
 	if(dayCounter % m_resourceProductionInterval == 0)
 	{
 		for (const auto& [resource, amount] : m_dailyResourceProduction)
-			m_globalResourceCount[resource] += amount;
+			Settlement::m_resources.resources[resource] += amount;
 	}
 	
-	Settlement::advanceByADay(dayCounter);
+	//Settlement::advanceByADay(dayCounter);
 }

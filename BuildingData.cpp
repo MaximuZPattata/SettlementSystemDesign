@@ -15,7 +15,7 @@ const std::unordered_map<BuildingType, BuildingDefinition> BuildingDefs =
     },
     {
         BuildingType::LumberCamp,
-        { { {ResourceType::Stone, 2}, {ResourceType::Food, 4} } }
+        { { {ResourceType::Brick, 2}, {ResourceType::Food, 3} } }
     },
     {
         BuildingType::Quarry,
