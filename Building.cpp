@@ -44,15 +44,13 @@ ResourceType Building::getResourceProductionType() const
 	return m_resourceProduction;
 }
 
-void Building::upgradeBuildingAndResourceProduction(const ResourceMap& resourcesAvailable)
+BuildingType Building::getBuildingType() const
 {
-	if (canUpgradeBuilding(resourcesAvailable))
-	{
-		m_currentBuildingLevel++;
-		m_resourceProductionAmount += 2;
-	}
-	else if(m_currentBuildingLevel >= m_maxbuildingLevel)
-		std::cout << toString(m_resourceProduction) << " is already at max level!" << std::endl;
-	else
-		std::cout << "Not enough resources to upgrade " << toString(m_resourceProduction) << "!" << std::endl;
+	return m_buildingType;
+}
+
+void Building::upgradeBuildingAndResourceProduction()
+{
+	m_currentBuildingLevel++;
+	m_resourceProductionAmount += 2;
 }

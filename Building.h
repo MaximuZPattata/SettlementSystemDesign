@@ -35,9 +35,34 @@ public:
 
     int getCurrentBuildingLevel() const;
     int getMaxBuildingLevel() const;
+    BuildingType getBuildingType() const;
 	ResourceType getResourceProductionType() const;
 	int getResourceForTheDay(int dayCounter);
     bool canUpgradeBuilding(const ResourceMap& resourcesAvailable) const;
-	void upgradeBuildingAndResourceProduction(const ResourceMap& resourcesAvailable);
+	void upgradeBuildingAndResourceProduction();
+};
+
+class FarmHouse : public Building
+{
+public:
+    FarmHouse() : Building(1, 5, 2, 2, ResourceType::Food, BuildingType::Farmhouse) {}
+};
+
+class Brickworks : public Building
+{
+public:
+    Brickworks() : Building(1, 4, 1, 3, ResourceType::Brick, BuildingType::Brickworks) {}
+};
+
+class LumberCamp : public Building
+{
+public:
+    LumberCamp() : Building(1, 4, 1, 1, ResourceType::Wood, BuildingType::LumberCamp) {}
+};
+
+class Quarry : public Building
+{
+public:
+    Quarry() : Building(1, 3, 1, 2, ResourceType::Stone, BuildingType::Quarry) {}
 };
 

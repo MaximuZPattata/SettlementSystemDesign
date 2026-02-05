@@ -8,25 +8,32 @@
 class Settlement
 {
 public:
+    ResourceMap m_globalResourceCount;
+    virtual void advanceByADay(int dayCounter) = 0;
     virtual ~Settlement() = default;
-    void AdvanceDay();
 };
 
 class MajorSettlement : public Settlement
 {
 private:
-	ResourceMap m_globalResourceCount;
     std::vector<std::unique_ptr<Building>> m_buildingsList;
+    
+    void consumeResources(const ResourceMap& cost);
+    void updateResourceProduction(int currentDayCounter);
+    void upgradeExistingBuildings();
+    std::unique_ptr<Building> createBuilding(BuildingType type);
+    void constructNewBuildings();
 
 public:
-	void UpdateResourceProduction(int currentDayCounter);
-    void ConstructNewBuildings();
+    void advanceByADay(int dayCounter) override;
 };
 
 class MinorSettlement : public Settlement
 {
 private:
-	// Fixed resource production for minor settlements at fixed intervals
+	// Minor settlements have a fixed daily resource production and no buildings to upgrade or construct.
+    ResourceMap m_dailyResourceProduction = { {ResourceType::Wood, 2}, {ResourceType::Brick, 1}, {ResourceType::Food, 1} };
+	int m_resourceProductionInterval = 3;
 public:
-    void AdvanceDay();
+    void advanceByADay(int dayCounter) override;
 };
