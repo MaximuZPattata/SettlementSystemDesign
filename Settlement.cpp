@@ -2,7 +2,17 @@
 #include "BuildingData.h"
 #include "Building.h"
 
-extern std::string_view toString(BuildingType type);
+extern std::string_view buildingTypeToString(BuildingType type);
+extern std::string_view resourceTypeToString(ResourceType type);
+
+void Settlement::advanceByADay(int dayCounter)
+{
+	std::cout << "Settlement advanced by a day. Current day: " << dayCounter << std::endl;
+	std::cout << "Current resources: \n";
+
+	for (const auto& [resource, amount] : m_globalResourceCount)
+		std::cout << resourceTypeToString(resource) << ": " << amount << std::endl;
+}
 
 void MajorSettlement::consumeResources(const ResourceMap& cost)
 {
@@ -31,7 +41,7 @@ void MajorSettlement::upgradeExistingBuildings()
 
 		if (building->getCurrentBuildingLevel() >= building->getMaxBuildingLevel())
 		{
-			std::cout << toString(building->getBuildingType()) << " is already at MAX level!!" << std::endl;
+			std::cout << buildingTypeToString(building->getBuildingType()) << " is already at MAX level!!" << std::endl;
 			continue;
 		}
 		//----------------------------INITIALIZE VARIABLES FOR UPGRADE-----------------------------
@@ -87,6 +97,8 @@ void MajorSettlement::constructNewBuildings()
 
 		auto building = createBuilding(buildingType);
 		m_buildingsList.push_back(std::move(building));
+
+		std::cout << "Constructed new " << buildingTypeToString(buildingType) << "!" << std::endl;
 	}
 }
 
@@ -116,6 +128,8 @@ void MajorSettlement::advanceByADay(int dayCounter)
 	updateResourceProduction(dayCounter);
 	upgradeExistingBuildings();
 	constructNewBuildings();
+
+	Settlement::advanceByADay(dayCounter);
 }
 
 void MinorSettlement::advanceByADay(int dayCounter)
@@ -125,4 +139,6 @@ void MinorSettlement::advanceByADay(int dayCounter)
 		for (const auto& [resource, amount] : m_dailyResourceProduction)
 			m_globalResourceCount[resource] += amount;
 	}
+	
+	Settlement::advanceByADay(dayCounter);
 }

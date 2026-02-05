@@ -23,7 +23,7 @@ const std::unordered_map<BuildingType, BuildingDefinition> BuildingDefs =
     }
 };
 
-std::string_view toString(BuildingType type)
+std::string_view buildingTypeToString(BuildingType type)
 {
     switch(type)
     {
@@ -31,6 +31,18 @@ std::string_view toString(BuildingType type)
     case BuildingType::Farmhouse:  return "Farmhouse";
     case BuildingType::Brickworks: return "Brickworks";
     case BuildingType::Quarry: return "Quarry";
+    default:                  return "Unknown";
+    }
+}
+
+std::string_view resourceTypeToString(ResourceType type)
+{
+    switch (type)
+    {
+    case ResourceType::Wood:  return "Wood";
+    case ResourceType::Food:  return "Food";
+    case ResourceType::Brick: return "Brick";
+    case ResourceType::Stone: return "Stone";
     default:                  return "Unknown";
     }
 }

@@ -1,6 +1,6 @@
 #include "Building.h"
 
-extern std::string_view toString(ResourceType type);
+extern std::string_view buildingTypeToString(BuildingType type);
 
 int Building::getCurrentBuildingLevel() const
 {
@@ -53,4 +53,7 @@ void Building::upgradeBuildingAndResourceProduction()
 {
 	m_currentBuildingLevel++;
 	m_resourceProductionAmount += 2;
+
+	std::cout << "Upgraded " << buildingTypeToString(m_buildingType) << " to level " << m_currentBuildingLevel
+		<< ". New production amount: " << m_resourceProductionAmount << std::endl;
 }

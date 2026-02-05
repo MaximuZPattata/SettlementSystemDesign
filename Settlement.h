@@ -9,7 +9,7 @@ class Settlement
 {
 public:
     ResourceMap m_globalResourceCount;
-    virtual void advanceByADay(int dayCounter) = 0;
+    virtual void advanceByADay(int dayCounter);
     virtual ~Settlement() = default;
 };
 
