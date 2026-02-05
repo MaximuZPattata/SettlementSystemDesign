@@ -2,17 +2,56 @@
 #include <map>
 #include <vector>
 
+enum class ResourceType
+{
+        Wood,
+        Stone,
+        Paddy,
+        Food
+};
 
-class Building // Building class
+class Resource
+{
+
+};
+
+
+class Settlement
+{
+public:
+    virtual ~Settlement() = default;
+};
+
+class MajorSettlement : public Settlement
 {
 private:
+    //Resources
+public:
+    void ConstructNewBuildings()
+    {
+        //CheckIfEnoughResources
+        //
+    }
+};
+
+class MinorSettlement : public Settlement
+{
+public:
+    void AdvanceDay();
+};
+
+class Building
+{
+private:
+    
     int m_currentBuildingLevel;
     int m_maxbuildingLevel;
 
 public:
-    virtual ~Building() = default;
 
-    Building() : Building(0, 1) {}
+    //---------------------------CONSTRUCTOR----------------------------
+
+    Building() : Building(1, 1) {}
 
     Building(int currentLevel, int maxLevel)
         : m_currentBuildingLevel(currentLevel), m_maxbuildingLevel(maxLevel)
@@ -21,21 +60,35 @@ public:
             throw std::logic_error("Invalid building levels");
     }
 
-    int GetCurrentBuildingLevel() const
+    //----------------------------DESTRUCTOR----------------------------
+
+    virtual ~Building() = default;
+
+    //-------------------GET PRIVATE MEMBER FUNCTIONS-------------------
+
+    int getCurrentBuildingLevel() const
     {
         return m_currentBuildingLevel;
     }
 
-    int GetMaxBuildingLevel() const
+    int getMaxBuildingLevel() const
     {
         return m_maxbuildingLevel;
     }
 };
 
+class FarmHouse : public Building
+{
+public:
+	FarmHouse() : Building(1, 5) {}
+};
+
+
+
 
 int main()
 {
-    Building b(4, 4);
+    FarmHouse b;
 
-    std::cout << b.GetCurrentBuildingLevel() << " : " << b.GetMaxBuildingLevel() << std::endl;
+    std::cout << b.getCurrentBuildingLevel() << " : " << b.getMaxBuildingLevel() << std::endl;
 }
