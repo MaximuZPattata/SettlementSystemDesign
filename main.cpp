@@ -2,38 +2,13 @@
 #include <map>
 #include <vector>
 #include "Building.h"
-#include "Types.h"
+#include "BuildingData.h"
 
 class Resource
 {
 
 };
 
-
-class Settlement
-{
-public:
-    virtual ~Settlement() = default;
-};
-
-class MajorSettlement : public Settlement
-{
-private:
-    //Resources
-public:
-    void ConstructNewBuildings()
-    {
-        //CheckIfEnoughResources
-        //
-    }
-};
-
-class MinorSettlement : public Settlement
-{
-public:
-    void AdvanceDay();
-};
-//
 //class FarmHouse : public Building
 //{
 //public:
@@ -61,7 +36,7 @@ public:
 
 int main()
 {
-    //FarmHouse b;
+    /*FarmHouse b;
 
-    //std::cout << b.getCurrentBuildingLevel() << " : " << b.getMaxBuildingLevel() << std::endl;
+    std::cout << b.getCurrentBuildingLevel() << " : " << b.getMaxBuildingLevel() << std::endl;*/
 }

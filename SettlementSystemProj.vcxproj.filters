@@ -24,6 +24,9 @@
     <ClCompile Include="BuildingData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Settlement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Building.h">
@@ -32,7 +35,7 @@
     <ClInclude Include="BuildingData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Types.h">
+    <ClInclude Include="Settlement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
