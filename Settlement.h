@@ -4,44 +4,26 @@
 #include <memory>
 #include "Building.h"
 #include "BuildingData.h"
-
-class ISettlementObserver
-{
-public:
-    virtual ~ISettlementObserver() = default;
-
-    virtual void onBuildingConstructed(BuildingType type) = 0;
-    virtual void onBuildingUpgraded(BuildingType type) = 0;
-    virtual void onResourcesChanged(const ResourceMap& newResources) = 0;
-};
+#include "ObserverInterface.h"
 
 class Settlement
 {
 protected:
     GlobalResources& m_resources;
-    std::vector<ISettlementObserver*> m_observers;
+    std::vector<ISettlementObserver*> m_observersList;
 
-    void notifyBuildingConstructed(BuildingType type)
-    {
-        for (auto* obs : m_observers)
-            obs->onBuildingConstructed(type);
-    }
-
-    void notifyResourcesChanged()
-    {
-        for (auto* obs : m_observers)
-            obs->onResourcesChanged(m_resources.get());
-    }
+    void notifyOnDayAdvanced(int dayCounter);
+    void notifyBuildingConstructed(BuildingType type);
+    void notifyBuildingUpgraded(BuildingType type, int level);
+    void notifyResourcesChanged();
 
 public:
     explicit Settlement(GlobalResources& resources) : m_resources(resources) {}
-    virtual void advanceByADay(int dayCounter);
+    virtual void advanceByADay(int dayCounter) = 0;
+    void addResources(const ResourceMap&);
+    void consumeResources(const ResourceMap&);
+    void addObserver(ISettlementObserver* observer);
     virtual ~Settlement() = default;
-
-    void addObserver(ISettlementObserver* observer)
-    {
-        m_observers.push_back(observer);
-    }
 };
 
 class MajorSettlement : public Settlement
@@ -55,7 +37,7 @@ private:
     void constructNewBuildings();
 
 public:
-    MajorSettlement(GlobalResources& resources) : Settlement(resources) {}
+	MajorSettlement(GlobalResources& resources) : Settlement(resources) {}
     void advanceByADay(int dayCounter) override;
 };
 
@@ -66,6 +48,6 @@ private:
     ResourceMap m_dailyResourceProduction = { {ResourceType::Wood, 2}, {ResourceType::Brick, 1}, {ResourceType::Food, 1} };
 	int m_resourceProductionInterval = 3;
 public:
-    MinorSettlement(GlobalResources& resources): Settlement(resources) {}
+    MinorSettlement(GlobalResources& resources) : Settlement(resources) {}
     void advanceByADay(int dayCounter) override;
 };

@@ -4,16 +4,19 @@
 #include "Building.h"
 #include "BuildingData.h"
 #include "Settlement.h"
+#include "AnyUI.h"
 
 
 int main()
 {
 	int dayCounter = 0;
     GlobalResources globalResources;
+	AnyUI uiObserver;
 	globalResources.resources = { { ResourceType::Wood,  10 }, { ResourceType::Stone, 10 }, { ResourceType::Brick, 10 }, { ResourceType::Food, 10 } };
 
     MajorSettlement major(globalResources);
     MinorSettlement minor(globalResources);
+	major.addObserver(&uiObserver);
 
     while (true)
     {
@@ -21,7 +24,7 @@ int main()
         std::string input;
         std::getline(std::cin, input);
 
-        if (input == "Q")
+        if (input == "Q" || input == "q")
             break;
 
         major.advanceByADay(dayCounter);

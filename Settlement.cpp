@@ -5,30 +5,68 @@
 extern std::string_view buildingTypeToString(BuildingType type);
 extern std::string_view resourceTypeToString(ResourceType type);
 
-void Settlement::advanceByADay(int dayCounter)
-{
-	std::cout << "Settlement advanced by a day. Current day: " << dayCounter << std::endl;
-	std::cout << "Current resources: \n";
+//------------------------------------SETTLEMENT CLASS IMPLEMENTATION------------------------------------
 
-	for (const auto& [resource, amount] : m_resources.resources)
-		std::cout << resourceTypeToString(resource) << ": " << amount << std::endl;
+void Settlement::notifyOnDayAdvanced(int dayCounter)
+{
+	for (auto* obs : m_observersList)
+		obs->onDayAdvanced(dayCounter);
 }
 
-void MajorSettlement::consumeResources(const ResourceMap& cost)
+void Settlement::notifyBuildingConstructed(BuildingType type)
+{
+	for (auto* obs : m_observersList)
+		obs->onBuildingConstructed(type);
+}
+
+void Settlement::notifyBuildingUpgraded(BuildingType type, int level)
+{
+	for (auto* obs : m_observersList)
+		obs->onBuildingUpgraded(type, level);
+}
+
+void Settlement::notifyResourcesChanged()
+{
+	for (auto* obs : m_observersList)
+		obs->onResourcesChanged(m_resources.resources);
+}
+
+void Settlement::addObserver(ISettlementObserver* observer)
+{
+	m_observersList.push_back(observer);
+}
+
+void Settlement::consumeResources(const ResourceMap& cost)
 {
 	for (const auto& [resource, amount] : cost)
 		m_resources.resources[resource] -= amount;
+
+	notifyResourcesChanged();
 }
+
+void Settlement::addResources(const ResourceMap& resourceProduced)
+{
+	for (const auto& [resource, amount] : resourceProduced)
+		m_resources.resources[resource] += amount;
+
+	notifyResourcesChanged();
+}
+
+//---------------------------------MAJOR SETTLEMENT CLASS IMPLEMENTATION---------------------------------
 
 void MajorSettlement::updateResourceProduction(int currentDayCounter)
 {
+	ResourceMap totalProduction;
+
 	for (const auto& building : m_buildingsList)
 	{
-		ResourceType resourceType = building->getResourceProductionType();
-		int producedAmount = building->getResourceForTheDay(currentDayCounter);
+		auto type = building->getResourceProductionType();
+		auto amount = building->getResourceForTheDay(currentDayCounter);
 
-		m_resources.resources[resourceType] += producedAmount;
+		totalProduction[type] += amount;
 	}
+
+	addResources(totalProduction);
 }
 
 void MajorSettlement::upgradeExistingBuildings()
@@ -73,6 +111,10 @@ void MajorSettlement::upgradeExistingBuildings()
 		
 		consumeResources(upgradeCost);
 		building->upgradeBuildingAndResourceProduction();
+
+		//----------------------------NOTIFY OBSERVERS ABOUT THE UPGRADE---------------------------
+
+		notifyBuildingUpgraded(building->getBuildingType(), building->getCurrentBuildingLevel());
 	}
 }
 
@@ -101,8 +143,8 @@ void MajorSettlement::constructNewBuildings()
 		auto building = createBuilding(buildingType);
 		m_buildingsList.push_back(std::move(building));
 
-		notifyBuildingConstructed(buildingType);
-		notifyResourcesChanged();
+		//notifyBuildingConstructed(buildingType);
+		//notifyResourcesChanged();
 		//std::cout << "Constructed new " << buildingTypeToString(buildingType) << "!" << std::endl;
 	}
 }
@@ -133,17 +175,14 @@ void MajorSettlement::advanceByADay(int dayCounter)
 	updateResourceProduction(dayCounter);
 	upgradeExistingBuildings();
 	constructNewBuildings();
-
-	//Settlement::advanceByADay(dayCounter);
 }
+
+//---------------------------------MINOR SETTLEMENT CLASS IMPLEMENTATION---------------------------------
 
 void MinorSettlement::advanceByADay(int dayCounter)
 {
 	if(dayCounter % m_resourceProductionInterval == 0)
-	{
-		for (const auto& [resource, amount] : m_dailyResourceProduction)
-			Settlement::m_resources.resources[resource] += amount;
-	}
+		addResources(m_dailyResourceProduction);
 	
-	//Settlement::advanceByADay(dayCounter);
+	notifyOnDayAdvanced(dayCounter);
 }
