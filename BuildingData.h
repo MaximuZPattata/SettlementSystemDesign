@@ -26,6 +26,9 @@ struct ResourceCost
     int amount;
 };
 
+//A map to represent the amount of each resource type, used for both construction costs and resource production
+using ResourceMap = std::unordered_map<ResourceType, int>;
+
 struct BuildingDefinition
 {
     ResourceMap buildCost;
@@ -36,9 +39,6 @@ class GlobalResources
 public:
     ResourceMap resources = {};
 };
-
-//A map to represent the amount of each resource type, used for both construction costs and resource production
-using ResourceMap = std::unordered_map<ResourceType, int>; 
 
 //Initializing the building definitions with their respective construction costs
 extern const std::unordered_map<BuildingType, BuildingDefinition> BuildingDefs; 
