@@ -2,6 +2,8 @@
 
 extern std::string_view buildingTypeToString(BuildingType type);
 
+//----------------------------OTHER MEMBER FUNCTION IMPLEMENTATION-----------------------------
+
 int Building::getCurrentBuildingLevel() const
 {
 	return m_currentBuildingLevel;
@@ -19,6 +21,18 @@ int Building::getResourceForTheDay(int dayCounter)
 	else
 		return 0;
 }
+
+ResourceType Building::getResourceProductionType() const
+{
+	return m_resourceProduction;
+}
+
+BuildingType Building::getBuildingType() const
+{
+	return m_buildingType;
+}
+
+//-----------------------------GET MEMBER FUNCTION IMPLEMENTATION------------------------------
 
 bool Building::canUpgradeBuilding(const ResourceMap& resourcesAvailable) const
 {
@@ -39,21 +53,8 @@ bool Building::canUpgradeBuilding(const ResourceMap& resourcesAvailable) const
 	return true;
 }
 
-ResourceType Building::getResourceProductionType() const
-{
-	return m_resourceProduction;
-}
-
-BuildingType Building::getBuildingType() const
-{
-	return m_buildingType;
-}
-
 void Building::upgradeBuildingAndResourceProduction()
 {
 	m_currentBuildingLevel++;
 	m_resourceProductionAmount += 2;
-
-	std::cout << "Upgraded " << buildingTypeToString(m_buildingType) << " to level " << m_currentBuildingLevel
-		<< ". New production amount: " << m_resourceProductionAmount << std::endl;
 }

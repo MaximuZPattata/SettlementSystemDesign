@@ -2,7 +2,8 @@
 #include <iostream>
 #include "BuildingData.h"
 
-class Building
+//Base Building Class
+class Building 
 {
 private:
 
@@ -35,12 +36,18 @@ public:
 
     int getCurrentBuildingLevel() const;
     int getMaxBuildingLevel() const;
+    int getResourceForTheDay(int dayCounter);
     BuildingType getBuildingType() const;
-	ResourceType getResourceProductionType() const;
-	int getResourceForTheDay(int dayCounter);
+    ResourceType getResourceProductionType() const;
+
+	//------------------OTHER BUILDING INFO FUNCTIONS-------------------
+
     bool canUpgradeBuilding(const ResourceMap& resourcesAvailable) const;
 	void upgradeBuildingAndResourceProduction();
 };
+
+//-----------------HARDCODING DEFAULT BUILDING DATA IN THE CONSTRUCTORS OF THESE CLASSES-----------------
+//--------------------------SCALABLE TO ADD MORE BUILDING TYPES IN THE FUTURE----------------------------
 
 class FarmHouse : public Building
 {

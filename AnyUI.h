@@ -4,6 +4,8 @@
 extern std::string_view buildingTypeToString(BuildingType type);
 extern std::string_view resourceTypeToString(ResourceType type);
 
+//-----------------IMPLEMENTATION CAN BE REPLACED BY ANY UI HERE-------------------------
+
 class AnyUI : public ISettlementObserver
 {
 public:

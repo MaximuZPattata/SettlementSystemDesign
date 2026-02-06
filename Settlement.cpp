@@ -78,10 +78,8 @@ void MajorSettlement::upgradeExistingBuildings()
 		//------------------------CHECK IF BUILDING IS ALREADY AT MAX LEVEL------------------------
 
 		if (building->getCurrentBuildingLevel() >= building->getMaxBuildingLevel())
-		{
-			std::cout << buildingTypeToString(building->getBuildingType()) << " is already at MAX level!!" << std::endl;
 			continue;
-		}
+
 		//----------------------------INITIALIZE VARIABLES FOR UPGRADE-----------------------------
 
 		const auto& baseCostList = BuildingDefs.at(building->getBuildingType()).buildCost;
@@ -122,8 +120,12 @@ void MajorSettlement::constructNewBuildings()
 {
 	for (const auto& [buildingType, definition] : BuildingDefs)
 	{
+		//---------------------------INITIALIZE VARIABLES FOR CONSTRUCTION-------------------------
+
 		const ResourceMap& costToBuild = definition.buildCost;
 		bool canBuild = true;
+
+		//--------------------CHECK IF RESOURCES ARE SUFFICIENT FOR CONSTRUCTION-------------------
 
 		for (const auto& [resource, requiredAmount] : costToBuild)
 		{
@@ -137,19 +139,20 @@ void MajorSettlement::constructNewBuildings()
 
 		if (!canBuild)
 			continue;
-		
-		consumeResources(costToBuild);
 
+		//---------------------CONSUME RESOURCES AND CONSTRUCTING THE BUILDING---------------------
+
+		consumeResources(costToBuild);
 		auto building = createBuilding(buildingType);
 		m_buildingsList.push_back(std::move(building));
 
-		//notifyBuildingConstructed(buildingType);
-		//notifyResourcesChanged();
-		//std::cout << "Constructed new " << buildingTypeToString(buildingType) << "!" << std::endl;
+		//-------------------------NOTIFY OBSERVERS ABOUT THE CONSTRUCTION-------------------------
+
+		notifyBuildingConstructed(buildingType);
 	}
 }
 
-std::unique_ptr<Building> MajorSettlement::createBuilding(BuildingType type)
+std::unique_ptr<Building> MajorSettlement::createBuilding(BuildingType type) //Factory method to create building based on the type
 {
 	switch (type)
 	{

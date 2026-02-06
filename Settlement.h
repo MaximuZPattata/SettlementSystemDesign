@@ -6,10 +6,15 @@
 #include "BuildingData.h"
 #include "ObserverInterface.h"
 
+//-------------------------------SETTLEMENT CLASS DEFINITIONS--------------------------------
+
 class Settlement
 {
 protected:
     GlobalResources& m_resources;
+
+	//-----OBSERVER MEMBER VARIABLE AND FUNCTIONS TO NOTIFY THE UI ABOUT CHANGES IN THE SETTLEMENT-----
+
     std::vector<ISettlementObserver*> m_observersList;
 
     void notifyOnDayAdvanced(int dayCounter);
@@ -18,13 +23,15 @@ protected:
     void notifyResourcesChanged();
 
 public:
-    explicit Settlement(GlobalResources& resources) : m_resources(resources) {}
+    Settlement(GlobalResources& resources) : m_resources(resources) {}
     virtual void advanceByADay(int dayCounter) = 0;
     void addResources(const ResourceMap&);
     void consumeResources(const ResourceMap&);
     void addObserver(ISettlementObserver* observer);
     virtual ~Settlement() = default;
 };
+
+//----------------------------MAJOR SETTLEMENT CLASS DEFINITIONS-----------------------------
 
 class MajorSettlement : public Settlement
 {
@@ -33,13 +40,15 @@ private:
     
     void updateResourceProduction(int currentDayCounter);
     void upgradeExistingBuildings();
-    std::unique_ptr<Building> createBuilding(BuildingType type);
+    std::unique_ptr<Building> createBuilding(BuildingType type); //Factory method to create building based on the type
     void constructNewBuildings();
 
 public:
 	MajorSettlement(GlobalResources& resources) : Settlement(resources) {}
     void advanceByADay(int dayCounter) override;
 };
+
+//----------------------------MINOR SETTLEMENT CLASS DEFINITIONS-----------------------------
 
 class MinorSettlement : public Settlement
 {

@@ -2,8 +2,9 @@
 #include <string_view>
 
 //-------------------------------HARDCODING BUILDING DATA HERE!!!-------------------------------
+//---------------------------SCALABLE TO ADD MORE TYPES IN THE FUTURE---------------------------
 
-const std::unordered_map<BuildingType, BuildingDefinition> BuildingDefs =
+const std::unordered_map<BuildingType, BuildingDefinition> BuildingDefs = //Initializing the building definitions with their respective construction costs
 {
     {
         BuildingType::Farmhouse,
@@ -22,6 +23,8 @@ const std::unordered_map<BuildingType, BuildingDefinition> BuildingDefs =
         { { {ResourceType::Food, 3}, {ResourceType::Wood, 3}, {ResourceType::Brick, 3} } }
     }
 };
+
+//-----------FUNCTIONS: SWITCH CASE FOR ENUM TYPE TO STRING - EASIER TO PRINT DATA-----------
 
 std::string_view buildingTypeToString(BuildingType type)
 {

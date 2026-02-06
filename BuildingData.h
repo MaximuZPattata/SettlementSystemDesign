@@ -2,6 +2,7 @@
 #include <unordered_map>
 
 //-------------------------------HARDCODING BUILDING DATA HERE!!!-------------------------------
+//---------------------------SCALABLE TO ADD MORE TYPES IN THE FUTURE---------------------------
 
 enum class ResourceType
 {
@@ -25,8 +26,6 @@ struct ResourceCost
     int amount;
 };
 
-using ResourceMap = std::unordered_map<ResourceType, int>;
-
 struct BuildingDefinition
 {
     ResourceMap buildCost;
@@ -38,4 +37,8 @@ public:
     ResourceMap resources = {};
 };
 
-extern const std::unordered_map<BuildingType, BuildingDefinition> BuildingDefs;
+//A map to represent the amount of each resource type, used for both construction costs and resource production
+using ResourceMap = std::unordered_map<ResourceType, int>; 
+
+//Initializing the building definitions with their respective construction costs
+extern const std::unordered_map<BuildingType, BuildingDefinition> BuildingDefs; 

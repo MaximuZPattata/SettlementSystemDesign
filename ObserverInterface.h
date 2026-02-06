@@ -1,5 +1,7 @@
 #pragma once
 
+//-----------------------------OBSERVER INTERFACE DEFINITIONS-----------------------------
+
 class ISettlementObserver
 {
 public:

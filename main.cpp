@@ -9,6 +9,8 @@
 
 int main()
 {
+	//-----------------------------INITIALIZATION-----------------------------
+
 	int dayCounter = 0;
     GlobalResources globalResources;
 	AnyUI uiObserver;
@@ -17,6 +19,9 @@ int main()
     MajorSettlement major(globalResources);
     MinorSettlement minor(globalResources);
 	major.addObserver(&uiObserver);
+	minor.addObserver(&uiObserver);
+
+    //-----------------------------MAIN GAME LOOP-----------------------------
 
     while (true)
     {
@@ -31,6 +36,6 @@ int main()
         minor.advanceByADay(dayCounter);
         dayCounter++;
 
-        std::cout << "-------------------------------------------------------------------------------\n";
+        std::cout << "\n-------------------------------------------------------------------------------\n";
     }
 }
